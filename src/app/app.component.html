@@ -1,20 +1,39 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
+<button type="button" (click)="expandAll()">Expand</button>
+<button type="button" (click)="collapseAll()">Collapse</button>
+<ngx-datatable #myTable class='material expandable' [rows]="rows" [groupRowsBy]="'age'" [columnMode]="'force'" [scrollbarH]="true"
+    [headerHeight]="50" [footerHeight]="50" [rowHeight]="40" [limit]="4" [groupExpansionDefault]="true">
+    <!-- Group Header Template -->
+    <ngx-datatable-group-header [rowHeight]="50" #myGroupHeader (toggle)="onDetailToggle($event)">
+        <ng-template let-group="group" let-expanded="expanded" ngx-datatable-group-header-template>
+            <div style="padding-left:5px;">
+                <a href="#" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Group"
+                    (click)="toggleExpandGroup(group)">
+                    <b>Age: {{group.value[0].age}}</b>
+                </a>
+            </div>
+        </ng-template>
+    </ngx-datatable-group-header>
+    <!-- Row Column Template -->
+    <ngx-datatable-column name="Exp. Pay." prop="" editable="true" frozenLeft="True">
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group">
+            <input type="checkbox" id="ep1{{rowIndex}}" name="{{rowIndex}}" value="0" class="expectedpayment" (change)="checkGroup($event, row, rowIndex, group)"
+                [checked]="row.exppayyes===1">
+            <label for="ep1{{rowIndex}}"></label>
+            <input type="checkbox" id="ep2{{rowIndex}}" name="{{rowIndex}}" value="1" class="expectedpayment2" (change)="checkGroup($event, row, rowIndex, group)"
+                [checked]="row.exppayno===1">
+            <label for="ep2{{rowIndex}}"></label>
+            <input type="checkbox" id="ep3{{rowIndex}}" name="{{rowIndex}}" value="2" class="expectedpayment3" (change)="checkGroup($event, row, rowIndex, group)"
+                [checked]="row.exppaypending===1">
+            <label for="ep3{{rowIndex}}"></label>
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Source" prop="source" editable="false" frozenLeft="True"></ngx-datatable-column>
+    <ngx-datatable-column name="Name" prop="name" editable="true"></ngx-datatable-column>
+    <ngx-datatable-column name="Gender" prop="gender"></ngx-datatable-column>
+    <ngx-datatable-column name="Age" prop="age"></ngx-datatable-column>
+    <ngx-datatable-column name="Comment" prop="comment">
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+            <input autofocus (blur)="updateValue($event, 'comment', rowIndex)" type="text" name="comment" [value]="value" />
+        </ng-template>
+    </ngx-datatable-column>
+</ngx-datatable>
